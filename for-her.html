@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>a little hug, for you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --midnight: #2b1e3a;
+    --midnight-deep: #201530;
+    --blush: #fff3ee;
+    --peach: #ffb199;
+    --gold: #ffd97d;
+    --lavender: #c9a7eb;
+    --rose: #f4a6c1;
+    --text-dark: #3a2a4d;
+    --text-light: #fff6f0;
+    --shadow: rgba(43, 30, 58, 0.35);
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin:0; padding:0; height:100%;
+    font-family:'Nunito', sans-serif;
+    background: radial-gradient(ellipse at top, #3a2856 0%, var(--midnight) 45%, var(--midnight-deep) 100%);
+    color: var(--text-light);
+    overflow-x:hidden;
+  }
+
+  h1,h2,h3, .display{
+    font-family:'Fredoka', sans-serif;
+  }
+
+  /* ---------- twinkling stars ---------- */
+  #stars{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+  }
+  .star{
+    position:absolute; width:3px; height:3px; background:#fff;
+    border-radius:50%; opacity:0.6;
+    animation: twinkle 3.5s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:0.15; transform:scale(1); }
+    50%{ opacity:0.9; transform:scale(1.6); }
+  }
+
+  /* ---------- fairy light garland ---------- */
+  .garland{
+    position:fixed; top:0; left:0; width:100%; height:70px;
+    z-index:5; pointer-events:none;
+    display:flex; justify-content:space-around; align-items:flex-start;
+    padding-top:6px;
+  }
+  .garland .bulb{
+    width:12px; height:16px; border-radius:50% 50% 60% 60%;
+    margin-top: var(--dip, 18px);
+    box-shadow: 0 0 10px 3px currentColor;
+    animation: glow 2.4s ease-in-out infinite;
+  }
+  @keyframes glow{
+    0%,100%{ filter:brightness(0.75); }
+    50%{ filter:brightness(1.3); }
+  }
+
+  /* ---------- floating hearts background ---------- */
+  #heartField{
+    position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden;
+  }
+  .bgheart{
+    position:absolute; bottom:-10%; font-size:20px; opacity:0.35;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp{
+    0%{ transform: translateY(0) rotate(0deg); opacity:0; }
+    10%{ opacity:0.5; }
+    100%{ transform: translateY(-115vh) rotate(25deg); opacity:0; }
+  }
+
+  /* ---------- layout ---------- */
+  .app{
+    position:relative; z-index:2;
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding: 90px 20px 40px;
+  }
+
+  .screen{
+    display:none;
+    width:100%; max-width:560px;
+    animation: riseIn 0.55s ease;
+  }
+  .screen.active{ display:block; }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform: translateY(18px) scale(0.98); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  .card{
+    background: var(--blush);
+    color: var(--text-dark);
+    border-radius: 28px;
+    padding: 36px 30px;
+    box-shadow: 0 20px 50px var(--shadow);
+    position:relative;
+    text-align:center;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:0; border-radius:28px;
+    border: 2px dashed rgba(196,120,150,0.35);
+    margin: 8px;
+    pointer-events:none;
+  }
+
+  .eyebrow{
+    display:inline-block;
+    font-family:'Fredoka', sans-serif;
+    font-size:12px; letter-spacing:2px; text-transform:uppercase;
+    color: var(--rose);
+    background: rgba(244,166,193,0.15);
+    padding: 5px 14px; border-radius:20px;
+    margin-bottom:14px;
+  }
+
+  h1.display{ font-size: 30px; margin: 4px 0 8px; }
+  p.sub{ font-size:15px; color:#6b5a80; margin:0 0 22px; line-height:1.5; }
+
+  input[type="date"], input[type="text"]{
+    font-family:'Nunito', sans-serif;
+    font-size:16px;
+    padding: 14px 16px;
+    border-radius:16px;
+    border:2px solid #f1d6e2;
+    background:#fffaf7;
+    color: var(--text-dark);
+    width:100%;
+    outline:none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus{
+    border-color: var(--rose);
+    box-shadow: 0 0 0 4px rgba(244,166,193,0.25);
+  }
+
+  .btn{
+    font-family:'Fredoka', sans-serif;
+    font-size:16px; font-weight:600;
+    border:none; cursor:pointer;
+    padding: 13px 26px;
+    border-radius:18px;
+    background: linear-gradient(135deg, var(--peach), var(--rose));
+    color: #4a2036;
+    box-shadow: 0 8px 20px rgba(244,166,193,0.45);
+    transition: transform .15s ease, box-shadow .15s ease;
+    margin-top: 18px;
+  }
+  .btn:hover{ transform: translateY(-2px); box-shadow: 0 12px 26px rgba(244,166,193,0.6); }
+  .btn:active{ transform: translateY(0px) scale(0.97); }
+  .btn.secondary{
+    background: transparent;
+    color: var(--text-dark);
+    box-shadow:none;
+    border:2px solid #e7c4d4;
+  }
+  .btn.ghost{
+    background: rgba(255,255,255,0.15);
+    color: var(--text-light);
+    border: 2px solid rgba(255,255,255,0.35);
+    box-shadow:none;
+  }
+
+  .shake{ animation: shake 0.4s; }
+  @keyframes shake{
+    10%,90%{ transform: translateX(-3px); }
+    20%,80%{ transform: translateX(6px); }
+    30%,50%,70%{ transform: translateX(-10px); }
+    40%,60%{ transform: translateX(10px); }
+  }
+
+  .hint{ font-size:13px; color:#a08bb5; margin-top:14px; }
+
+  /* ---------- home menu ---------- */
+  .menu-title{ text-align:center; margin-bottom: 26px; }
+  .menu-title h1{ font-size:30px; color:var(--text-light); margin:0 0 6px;}
+  .menu-title p{ color:#d9c8ec; font-size:14px; margin:0;}
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:16px;
+  }
+  @media (max-width:480px){ .grid{ grid-template-columns: 1fr; } }
+
+  .tile{
+    background: var(--blush);
+    color: var(--text-dark);
+    border-radius:22px;
+    padding: 22px 16px;
+    text-align:center;
+    cursor:pointer;
+    border: none;
+    box-shadow: 0 12px 26px rgba(0,0,0,0.25);
+    transition: transform .18s ease, box-shadow .18s ease;
+    font-family:'Nunito', sans-serif;
+  }
+  .tile:hover{ transform: translateY(-4px) rotate(-1deg); box-shadow: 0 16px 30px rgba(0,0,0,0.3); }
+  .tile .emoji{ font-size:36px; display:block; margin-bottom:8px; }
+  .tile .name{ font-family:'Fredoka', sans-serif; font-weight:600; font-size:16px; margin-bottom:2px;}
+  .tile .desc{ font-size:12px; color:#8a7699; }
+
+  .back-row{ margin-top: 22px; text-align:center; }
+
+  /* ---------- hug screen ---------- */
+  .stage{
+    position:relative;
+    height:220px;
+    display:flex; align-items:flex-end; justify-content:center;
+    gap: 26px;
+    margin: 10px 0 6px;
+  }
+  .critter{ position:relative; transition: transform 0.6s cubic-bezier(.34,1.56,.64,1); }
+
+  /* Bubu - round bear */
+  .bubu{ width:110px; }
+  .bubu .body{
+    width:100px; height:95px; background:#c99b6b; border-radius:50% 50% 46% 46%;
+    position:relative; margin:0 auto; box-shadow: inset 0 -8px 14px rgba(0,0,0,0.08);
+  }
+  .bubu .ear{ width:30px; height:30px; background:#c99b6b; border-radius:50%; position:absolute; top:-12px; }
+  .bubu .ear.l{ left:-4px; } .bubu .ear.r{ right:-4px; }
+  .bubu .face{ position:absolute; top:34px; width:100%; text-align:center; }
+  .bubu .cheek{ width:14px; height:9px; background:#f2a691; border-radius:50%; position:absolute; top:44px; opacity:.7;}
+  .bubu .cheek.l{ left:14px;} .bubu .cheek.r{ right:14px;}
+
+  /* Dudu - bunny */
+  .dudu{ width:90px; }
+  .dudu .body{
+    width:82px; height:88px; background:#fbeff6; border:2px solid #f3d3e4; border-radius:50% 50% 46% 46%;
+    position:relative; margin:0 auto; box-shadow: inset 0 -8px 14px rgba(0,0,0,0.05);
+  }
+  .dudu .ear{
+    width:16px; height:42px; background:#fbeff6; border:2px solid #f3d3e4;
+    border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+    position:absolute; top:-36px;
+  }
+  .dudu .ear.l{ left:14px; transform:rotate(-8deg);} .dudu .ear.r{ right:14px; transform:rotate(8deg);}
+  .dudu .face{ position:absolute; top:30px; width:100%; text-align:center; }
+  .dudu .cheek{ width:12px; height:8px; background:#f7b8cf; border-radius:50%; position:absolute; top:40px; opacity:.8;}
+  .dudu .cheek.l{ left:12px;} .dudu .cheek.r{ right:12px;}
+
+  .eyes{ font-size:15px; letter-spacing:6px; }
+  .mouth{ font-size:12px; margin-top:2px; }
+
+  /* dudu (left) leans right INTO bubu (right); bubu leans back to meet it */
+  .stage.hugging .dudu{ transform: translateX(46px) rotate(10deg); z-index:3; }
+  .stage.hugging .bubu{ transform: translateX(-16px) rotate(-7deg) scale(1.04); z-index:2; }
+
+  .hug-glow{
+    position:absolute; left:50%; bottom:20px; width:170px; height:170px;
+    transform: translateX(-50%) scale(0.6); border-radius:50%;
+    background: radial-gradient(circle, rgba(255,217,125,0.55) 0%, rgba(255,217,125,0) 70%);
+    opacity:0; transition: opacity .5s ease, transform .5s ease; pointer-events:none;
+  }
+  .stage.hugging .hug-glow{ opacity:1; transform: translateX(-50%) scale(1); }
+
+  .arm{
+    position:absolute; width:15px; height:44px; background:#fbeff6; border:2px solid #f3d3e4;
+    border-radius:10px; top:36px; right:-4px; opacity:0;
+    transform-origin: top center;
+    transition: opacity .35s ease .3s, transform .45s cubic-bezier(.34,1.56,.64,1) .3s;
+  }
+  .stage.hugging .arm{ opacity:1; }
+  .stage.hugging .arm.a1{ transform: rotate(78deg) translate(2px,-2px); }
+  .stage.hugging .arm.a2{ transform: rotate(102deg) translate(6px,4px); }
+  .arm.a1{ transform: rotate(20deg); }
+  .arm.a2{ transform: rotate(20deg); }
+
+  /* bubu's arm reaches back around dudu for a real two-way hug */
+  .bubu .arm{ left:-4px; right:auto; transform-origin: top center; }
+  .stage.hugging .bubu .arm.b1{ transform: rotate(-70deg) translate(-2px,-2px); }
+  .bubu .arm.b1{ transform: rotate(-15deg); }
+
+  .kiss-pop{
+    position:absolute; left:50%; top:6px; transform: translateX(-50%) scale(0);
+    font-size:20px; opacity:0; transition: none;
+  }
+  .stage.kissing .kiss-pop{ animation: kissPop 1.4s ease forwards; }
+  @keyframes kissPop{
+    0%{ opacity:0; transform: translateX(-50%) scale(0); }
+    40%{ opacity:1; transform: translateX(-50%) scale(1.3); }
+    70%{ opacity:1; transform: translateX(-50%) scale(1); }
+    100%{ opacity:0; transform: translateX(-50%) translateY(-20px) scale(1); }
+  }
+
+  .burst{ position:relative; height:34px; }
+  .burst span{
+    position:absolute; bottom:0; font-size:0; opacity:0;
+  }
+  .stage.hugging + .burst span{
+    animation: pop 1.1s ease forwards;
+    font-size:18px;
+  }
+  .burst span:nth-child(1){ left:34%; animation-delay:.2s; }
+  .burst span:nth-child(2){ left:50%; animation-delay:.4s; }
+  .burst span:nth-child(3){ left:64%; animation-delay:.6s; }
+  @keyframes pop{
+    0%{ opacity:0; transform: translateY(0) scale(0.4); }
+    30%{ opacity:1; }
+    100%{ opacity:0; transform: translateY(-50px) scale(1.15); }
+  }
+
+  .caption{ font-family:'Fredoka', sans-serif; font-size:16px; margin-top:8px; min-height:24px; }
+
+  /* ---------- word game ---------- */
+  .board{ display:grid; gap:6px; margin: 6px auto 14px; width:min(100%, 300px); }
+  .row{ display:grid; grid-template-columns: repeat(5,1fr); gap:6px; }
+  .cell{
+    aspect-ratio:1; border-radius:10px; border:2px solid #e7c4d4;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fredoka', sans-serif; font-weight:600; font-size:20px;
+    text-transform:uppercase; background:#fffaf7; color:var(--text-dark);
+    transition: transform .25s, background .25s, border-color .25s;
+  }
+  .cell.correct{ background:#b8dfc4; border-color:#9fcbae; color:#274a30; }
+  .cell.present{ background:var(--gold); border-color:#e9bf5c; color:#5a4514; }
+  .cell.absent{ background:#e4dde8; border-color:#d3c9da; color:#7a6f85; }
+  .cell.pop{ transform: scale(1.12); }
+
+  .keyboard{ display:flex; flex-direction:column; gap:6px; align-items:center; margin-top:6px;}
+  .krow{ display:flex; gap:5px; }
+  .key{
+    font-family:'Nunito', sans-serif; font-weight:700; font-size:12px;
+    border:none; border-radius:8px; padding:10px 8px; min-width:26px;
+    background:#f1e3ea; color:var(--text-dark); cursor:pointer;
+  }
+  .key.wide{ min-width:44px; font-size:11px; }
+  .key.correct{ background:#b8dfc4; }
+  .key.present{ background:var(--gold); }
+  .key.absent{ background:#d3c9da; color:#fff; }
+
+  .gamemsg{ font-family:'Fredoka', sans-serif; min-height:22px; margin-top:10px; font-size:14px; color:#8a5b78;}
+
+  .game-tabs{ display:flex; gap:8px; justify-content:center; margin-bottom:18px; }
+  .tab-btn{ margin-top:0; padding:9px 18px; font-size:13px; }
+  .tab-btn.active{ background: linear-gradient(135deg, var(--peach), var(--rose)); color:#4a2036; box-shadow: 0 8px 20px rgba(244,166,193,0.45); border-color:transparent; }
+
+  /* ---------- memory match ---------- */
+  .memory-grid{
+    display:grid; grid-template-columns: repeat(4, 1fr); gap:8px;
+    max-width:320px; margin: 0 auto 12px;
+  }
+  .mcard{
+    aspect-ratio:1; border-radius:14px; border:none; cursor:pointer;
+    background: linear-gradient(135deg, var(--lavender), #e3cff5);
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; color:transparent;
+    transition: transform .25s, background .25s;
+  }
+  .mcard.flipped{ background:#fffaf7; border:2px solid #f0c9db; color:inherit; transform: scale(1.04); }
+  .mcard.matched{ background:#d9f0e0; border:2px solid #b8dfc4; color:inherit; cursor:default; opacity:0.9; }
+  .memory-stats{ font-size:13px; color:#8a5b78; margin-bottom:6px; }
+
+  /* ---------- catch the hearts ---------- */
+  .catch-board{
+    display:grid; grid-template-columns: repeat(4, 1fr); gap:8px;
+    max-width:320px; margin: 0 auto 12px;
+  }
+  .ccell{
+    aspect-ratio:1; border-radius:14px; border:none; cursor:pointer;
+    background:#f6e9f0; display:flex; align-items:center; justify-content:center;
+    font-size:24px;
+  }
+  .ccell.active{
+    background: linear-gradient(135deg, var(--peach), var(--rose));
+    animation: heartPop .35s ease;
+  }
+  @keyframes heartPop{
+    from{ transform:scale(0.4); opacity:0; }
+    to{ transform:scale(1); opacity:1; }
+  }
+
+  /* ---------- propose screen ---------- */
+  #proposeText{ transition: font-size .3s ease; }
+  .propose-btns{ display:flex; gap:14px; justify-content:center; align-items:center; flex-wrap:wrap; }
+  #yesBtn{ transition: transform .35s cubic-bezier(.34,1.56,.64,1), padding .35s ease, font-size .35s ease; }
+  #yesBtn.grow1{ transform: scale(1.18); }
+  #yesBtn.grow2{ transform: scale(1.42); }
+  #noBtn{ transition: transform .3s ease, opacity .3s ease; }
+  #noBtn.shrink1{ transform: scale(0.82); }
+  #noBtn.shrink2{ transform: scale(0.6); opacity:0.7; }
+
+  #proposeCard.all-yes{ cursor:pointer; }
+  #proposeCard.all-yes #yesBtn{
+    width:100%; padding:34px 10px; font-size:22px; transform:none;
+    animation: pulseYes 1.4s ease-in-out infinite;
+  }
+  @keyframes pulseYes{
+    0%,100%{ box-shadow: 0 8px 20px rgba(244,166,193,0.45); }
+    50%{ box-shadow: 0 8px 34px rgba(244,166,193,0.9); }
+  }
+
+  #proposeSuccess .display{ font-size:26px; }
+
+  /* ---------- facts screen ---------- */
+  .fact-box{
+    background:#fffaf7; border:2px dashed #f0c9db; border-radius:20px;
+    padding: 26px 20px; min-height:110px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:17px; line-height:1.5; margin: 6px 0 6px;
+  }
+  .fact-count{ font-size:13px; color:#a08bb5; margin-bottom:16px; }
+
+  /* ---------- notes screen ---------- */
+  .jar{
+    font-size:64px; cursor:pointer; user-select:none;
+    transition: transform .15s;
+    display:block; margin: 6px auto 12px;
+  }
+  .jar:hover{ transform: scale(1.08) rotate(-4deg); }
+  .note{
+    background:#fffaf7; border-radius:16px; padding:18px; font-size:15px;
+    border: 2px solid #f0c9db; min-height:70px; display:flex; align-items:center; justify-content:center;
+    margin-top:6px;
+  }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="heartField"></div>
+<div class="garland" id="garland"></div>
+
+<div class="app">
+
+  <!-- LOCK SCREEN -->
+  <section class="screen active" id="screen-lock">
+    <div class="card" id="lockCard">
+      <span class="eyebrow">for you, only</span>
+      <h1 class="display">a little something is waiting 💌</h1>
+      <p class="sub">Enter our date to unlock it.</p>
+      <input type="date" id="passInput" />
+      <div><button class="btn" id="unlockBtn">Unlock ✨</button></div>
+      <p class="hint" id="lockHint">hint: the day everything started</p>
+    </div>
+  </section>
+
+  <!-- HOME SCREEN -->
+  <section class="screen" id="screen-home">
+    <div class="menu-title">
+      <h1 class="display">hi love, welcome in 🤍</h1>
+      <p>whenever it feels like too much, come here for a minute.</p>
+    </div>
+    <div class="grid">
+      <button class="tile" data-go="hug">
+        <span class="emoji">🐻🐰</span>
+        <span class="name">Hug Corner</span>
+        <span class="desc">bubu &amp; dudu need to hug</span>
+      </button>
+      <button class="tile" data-go="game">
+        <span class="emoji">🎮</span>
+        <span class="name">Quick Game</span>
+        <span class="desc">guess the cozy word</span>
+      </button>
+      <button class="tile" data-go="facts">
+        <span class="emoji">💫</span>
+        <span class="name">Us, in Facts</span>
+        <span class="desc">10 things about us</span>
+      </button>
+      <button class="tile" data-go="notes">
+        <span class="emoji">🍯</span>
+        <span class="name">Note Jar</span>
+        <span class="desc">pick a little note</span>
+      </button>
+      <button class="tile" data-go="propose" style="grid-column: 1 / -1;">
+        <span class="emoji">💍</span>
+        <span class="name">A Question</span>
+        <span class="desc">would you accept my...</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- HUG SCREEN -->
+  <section class="screen" id="screen-hug">
+    <div class="card">
+      <span class="eyebrow">hug corner</span>
+      <h1 class="display">bubu is having a rough day</h1>
+      <p class="sub">tap the button so dudu can fix that.</p>
+
+      <div class="stage" id="stage">
+        <div class="hug-glow"></div>
+        <div class="critter dudu" id="dudu">
+          <div class="ear l"></div><div class="ear r"></div>
+          <div class="body">
+            <div class="face"><div class="eyes">• •</div><div class="mouth">‿</div></div>
+            <div class="cheek l"></div><div class="cheek r"></div>
+          </div>
+          <div class="arm a1"></div>
+          <div class="arm a2"></div>
+        </div>
+        <div class="critter bubu" id="bubu">
+          <div class="ear l"></div><div class="ear r"></div>
+          <div class="body">
+            <div class="face"><div class="eyes" id="bubuEyes">• •</div><div class="mouth" id="bubuMouth">⌢</div></div>
+            <div class="cheek l"></div><div class="cheek r"></div>
+          </div>
+          <div class="arm b1"></div>
+        </div>
+      </div>
+      <div class="burst"><span>💗</span><span>✨</span><span>💗</span></div>
+
+      <p class="caption" id="hugCaption">bubu feels a little overwhelmed today...</p>
+      <button class="btn" id="hugBtn">Give a hug 🤗</button>
+      <div class="back-row"><button class="btn secondary" data-go="home">← back home</button></div>
+    </div>
+  </section>
+
+  <!-- GAME SCREEN -->
+  <section class="screen" id="screen-game">
+    <div class="card">
+      <span class="eyebrow">quick games</span>
+      <h1 class="display" id="gameTitle">guess the cozy word</h1>
+      <p class="sub" id="gameSub">5 letters, 6 tries, all warm &amp; fuzzy words 💛</p>
+
+      <div class="game-tabs">
+        <button class="btn secondary tab-btn active" data-tab="word">🔤 Word Guess</button>
+        <button class="btn secondary tab-btn" data-tab="memory">🃏 Memory Match</button>
+        <button class="btn secondary tab-btn" data-tab="catch">💗 Catch Hearts</button>
+      </div>
+
+      <div id="wordGameWrap">
+        <div class="board" id="board"></div>
+        <div class="gamemsg" id="gameMsg">type using the keyboard below, then press enter</div>
+        <div class="keyboard" id="keyboard"></div>
+      </div>
+
+      <div id="memoryGameWrap" style="display:none;">
+        <p class="memory-stats" id="memoryStats">moves: 0 · pairs found: 0 / 8</p>
+        <div class="memory-grid" id="memoryGrid"></div>
+        <div class="gamemsg" id="memoryMsg">find all the matching pairs 💞</div>
+      </div>
+
+      <div id="catchGameWrap" style="display:none;">
+        <p class="memory-stats" id="catchStats">score: 0 · time left: 30s</p>
+        <div class="catch-board" id="catchBoard"></div>
+        <div class="gamemsg" id="catchMsg">press start and catch as many hearts as you can!</div>
+        <button class="btn" id="startCatchBtn">Start ▶️</button>
+      </div>
+
+      <div class="back-row">
+        <button class="btn secondary" id="newGameBtn">new word 🔄</button>
+        <button class="btn secondary" id="newMemoryBtn" style="display:none;">shuffle again 🔄</button>
+        <button class="btn secondary" data-go="home">← back home</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FACTS SCREEN -->
+  <section class="screen" id="screen-facts">
+    <div class="card">
+      <span class="eyebrow">us, in facts</span>
+      <h1 class="display">10 things about our us</h1>
+      <p class="fact-count" id="factCount">1 / 10</p>
+      <div class="fact-box" id="factBox"></div>
+      <button class="btn" id="factNextBtn">Next fact →</button>
+      <div class="back-row"><button class="btn secondary" data-go="home">← back home</button></div>
+    </div>
+  </section>
+
+  <!-- NOTES SCREEN -->
+  <section class="screen" id="screen-notes">
+    <div class="card">
+      <span class="eyebrow">note jar</span>
+      <h1 class="display">pick a note, any note</h1>
+      <p class="sub">tap the jar for a little something</p>
+      <span class="jar" id="jarBtn">🍯</span>
+      <div class="note" id="noteText">tap the jar above ☝️</div>
+      <div class="back-row"><button class="btn secondary" data-go="home">← back home</button></div>
+    </div>
+  </section>
+
+  <!-- PROPOSE SCREEN -->
+  <section class="screen" id="screen-propose">
+    <div class="card" id="proposeCard">
+
+      <div id="proposeQuestion">
+        <span class="eyebrow">would you accept my...</span>
+        <h1 class="display" id="proposeText">will you be my girlfriend, my wife, and my best friend... for eternity?</h1>
+        <div class="propose-btns" id="proposeBtns">
+          <button class="btn" id="yesBtn">Yes 🥹💍</button>
+          <button class="btn secondary" id="noBtn">No</button>
+        </div>
+      </div>
+
+      <div id="proposeSuccess" style="display:none;">
+        <span class="eyebrow">forever, starting now</span>
+        <h1 class="display">yaaay 🎉 i have myself a wifey!</h1>
+        <p class="sub">i knew you'd accept it 🥹💗</p>
+        <div class="stage" id="stage2">
+          <div class="hug-glow"></div>
+          <div class="kiss-pop">💋</div>
+          <div class="critter dudu" id="dudu2">
+            <div class="ear l"></div><div class="ear r"></div>
+            <div class="body">
+              <div class="face"><div class="eyes">^ ^</div><div class="mouth">‿</div></div>
+              <div class="cheek l"></div><div class="cheek r"></div>
+            </div>
+            <div class="arm a1"></div>
+            <div class="arm a2"></div>
+          </div>
+          <div class="critter bubu" id="bubu2">
+            <div class="ear l"></div><div class="ear r"></div>
+            <div class="body">
+              <div class="face"><div class="eyes">^ ^</div><div class="mouth">‿</div></div>
+              <div class="cheek l"></div><div class="cheek r"></div>
+            </div>
+            <div class="arm b1"></div>
+          </div>
+        </div>
+        <div class="burst"><span>💗</span><span>💍</span><span>💗</span></div>
+        <p class="caption">forever starts now, my love 🤍</p>
+      </div>
+
+      <div class="back-row"><button class="btn secondary" data-go="home">← back home</button></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------------- decorative background ---------------- */
+const starsEl = document.getElementById('stars');
+for(let i=0;i<60;i++){
+  const s = document.createElement('div');
+  s.className='star';
+  s.style.left = Math.random()*100+'%';
+  s.style.top = Math.random()*70+'%';
+  s.style.animationDelay = (Math.random()*3.5)+'s';
+  starsEl.appendChild(s);
+}
+
+const garland = document.getElementById('garland');
+const bulbColors = ['#ffd97d','#ffb199','#f4a6c1','#c9a7eb','#9fd8c9'];
+for(let i=0;i<22;i++){
+  const b=document.createElement('div');
+  b.className='bulb';
+  b.style.color = bulbColors[i % bulbColors.length];
+  b.style.background = bulbColors[i % bulbColors.length];
+  b.style.setProperty('--dip', (Math.sin(i*0.9)*10+18)+'px');
+  b.style.animationDelay = (i*0.15)+'s';
+  garland.appendChild(b);
+}
+
+const heartField = document.getElementById('heartField');
+const heartEmojis = ['💗','💫','🤍','✨'];
+for(let i=0;i<16;i++){
+  const h=document.createElement('div');
+  h.className='bgheart';
+  h.textContent = heartEmojis[i % heartEmojis.length];
+  h.style.left = Math.random()*100+'%';
+  h.style.animationDuration = (10+Math.random()*10)+'s';
+  h.style.animationDelay = (Math.random()*10)+'s';
+  h.style.fontSize = (14+Math.random()*14)+'px';
+  heartField.appendChild(h);
+}
+
+/* ---------------- navigation ---------------- */
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+}
+document.querySelectorAll('[data-go]').forEach(el=>{
+  el.addEventListener('click', ()=> showScreen(el.getAttribute('data-go')));
+});
+
+/* ---------------- lock screen ---------------- */
+const PASSWORD = "2025-03-31";
+const passInput = document.getElementById('passInput');
+const unlockBtn = document.getElementById('unlockBtn');
+const lockCard = document.getElementById('lockCard');
+const lockHint = document.getElementById('lockHint');
+
+function tryUnlock(){
+  if(passInput.value === PASSWORD){
+    showScreen('home');
+  } else {
+    lockCard.classList.remove('shake');
+    void lockCard.offsetWidth;
+    lockCard.classList.add('shake');
+    lockHint.textContent = "not quite... try again 💭";
+  }
+}
+unlockBtn.addEventListener('click', tryUnlock);
+passInput.addEventListener('keydown', e=>{ if(e.key==='Enter') tryUnlock(); });
+
+/* ---------------- hug corner ---------------- */
+const stage = document.getElementById('stage');
+const hugBtn = document.getElementById('hugBtn');
+const hugCaption = document.getElementById('hugCaption');
+const bubuEyes = document.getElementById('bubuEyes');
+const bubuMouth = document.getElementById('bubuMouth');
+
+const hugLines = [
+  "aaand there it is. bubu feels better already 🤎",
+  "dudu's got you. always.",
+  "no matter how heavy the day is, this fixes a little bit of it.",
+  "take a breath. you're allowed to feel held.",
+];
+let hugged = false;
+hugBtn.addEventListener('click', ()=>{
+  stage.classList.add('hugging');
+  bubuEyes.textContent = "^ ^";
+  bubuMouth.textContent = "‿";
+  hugCaption.textContent = hugLines[Math.floor(Math.random()*hugLines.length)];
+  hugBtn.textContent = "Hug again 🤍";
+  hugged = true;
+  setTimeout(()=>{ stage.classList.remove('hugging'); }, 2600);
+});
+
+/* ---------------- word game (wordle-style) ---------------- */
+const SAFE_WORDS = ["HAPPY","SWEET","HEART","SMILE","DREAM","MAGIC","PEACE","ADORE","CHARM","LOYAL","TRUST","CUTIE"];
+
+let secret = "";
+let currentRow = 0;
+let currentGuess = "";
+const board = document.getElementById('board');
+const gameMsg = document.getElementById('gameMsg');
+const keyboard = document.getElementById('keyboard');
+const keyState = {};
+
+function buildBoard(){
+  board.innerHTML = "";
+  board.style.gridTemplateRows = "repeat(6, 1fr)";
+  for(let r=0;r<6;r++){
+    const row = document.createElement('div');
+    row.className='row';
+    row.id = 'row-'+r;
+    for(let c=0;c<5;c++){
+      const cell=document.createElement('div');
+      cell.className='cell';
+      cell.id = `cell-${r}-${c}`;
+      row.appendChild(cell);
+    }
+    board.appendChild(row);
+  }
+}
+
+const rowsOrder = [
+  "Q W E R T Y U I O P".split(" "),
+  "A S D F G H J K L".split(" "),
+  ["ENTER","Z","X","C","V","B","N","M","⌫"]
+];
+function buildKeyboard(){
+  keyboard.innerHTML = "";
+  rowsOrder.forEach(rowKeys=>{
+    const krow = document.createElement('div');
+    krow.className='krow';
+    rowKeys.forEach(k=>{
+      const btn = document.createElement('button');
+      btn.className = 'key' + (k.length>1 ? ' wide':'');
+      btn.textContent = k;
+      btn.id = 'key-'+k;
+      btn.addEventListener('click', ()=> handleKey(k));
+      krow.appendChild(btn);
+    });
+    keyboard.appendChild(krow);
+  });
+}
+
+function newGame(){
+  secret = SAFE_WORDS[Math.floor(Math.random()*SAFE_WORDS.length)];
+  currentRow = 0;
+  currentGuess = "";
+  gameMsg.textContent = "type using the keyboard below, then press enter";
+  Object.keys(keyState).forEach(k=>delete keyState[k]);
+  buildBoard();
+  updateKeyboardColors();
+}
+
+function handleKey(k){
+  if(currentRow>5) return;
+  if(k==="ENTER"){
+    if(currentGuess.length<5){ gameMsg.textContent = "need 5 letters!"; return; }
+    revealRow();
+    return;
+  }
+  if(k==="⌫"){
+    currentGuess = currentGuess.slice(0,-1);
+    renderCurrentRow();
+    return;
+  }
+  if(/^[A-Z]$/.test(k) && currentGuess.length<5){
+    currentGuess += k;
+    renderCurrentRow();
+  }
+}
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('screen-game').classList.contains('active')) return;
+  const k = e.key.toUpperCase();
+  if(k==="ENTER") handleKey("ENTER");
+  else if(k==="BACKSPACE") handleKey("⌫");
+  else if(/^[A-Z]$/.test(k)) handleKey(k);
+});
+
+function renderCurrentRow(){
+  for(let c=0;c<5;c++){
+    const cell = document.getElementById(`cell-${currentRow}-${c}`);
+    cell.textContent = currentGuess[c] || "";
+  }
+}
+
+function revealRow(){
+  const guess = currentGuess;
+  const secretArr = secret.split("");
+  const result = Array(5).fill("absent");
+  const used = Array(5).fill(false);
+
+  for(let i=0;i<5;i++){
+    if(guess[i]===secretArr[i]){ result[i]="correct"; used[i]=true; }
+  }
+  for(let i=0;i<5;i++){
+    if(result[i]==="correct") continue;
+    const idx = secretArr.findIndex((ch,j)=> ch===guess[i] && !used[j]);
+    if(idx>-1){ result[i]="present"; used[idx]=true; }
+  }
+
+  for(let c=0;c<5;c++){
+    const cell = document.getElementById(`cell-${currentRow}-${c}`);
+    setTimeout(()=>{
+      cell.classList.add(result[c], 'pop');
+      setTimeout(()=>cell.classList.remove('pop'),250);
+    }, c*180);
+
+    const letter = guess[c];
+    const rank = {absent:0, present:1, correct:2};
+    if(!keyState[letter] || rank[result[c]] > rank[keyState[letter]]){
+      keyState[letter] = result[c];
+    }
+  }
+
+  setTimeout(()=>{
+    updateKeyboardColors();
+    if(guess===secret){
+      gameMsg.textContent = "yes!! that's the word 🎉 you're so smart, cutie";
+      currentRow = 6;
+    } else if(currentRow===5){
+      gameMsg.textContent = `so close — it was "${secret}" 💗`;
+      currentRow = 6;
+    } else {
+      currentRow++;
+      currentGuess = "";
+      gameMsg.textContent = "keep going, you've got this 💪";
+    }
+  }, 5*180+300);
+}
+
+function updateKeyboardColors(){
+  Object.keys(keyState).forEach(letter=>{
+    const btn = document.getElementById('key-'+letter);
+    if(btn){
+      btn.classList.remove('correct','present','absent');
+      btn.classList.add(keyState[letter]);
+    }
+  });
+}
+
+document.getElementById('newGameBtn').addEventListener('click', newGame);
+buildKeyboard();
+newGame();
+
+/* ---------------- facts screen ---------------- */
+const FACTS = [
+  "You are, hands down, my favorite person to text good morning to.",
+  "Every time you laugh at your own joke before finishing it, I fall a little more.",
+  "I remember exactly how nervous and excited I was before our first real conversation.",
+  "You make hard days feel lighter just by asking how mine went.",
+  "I still think about the little things you do that you probably don't even notice.",
+  "You're the calm I didn't know I needed.",
+  "Somehow you always know exactly what to say when I'm overwhelmed.",
+  "I'm a little more myself when I'm around you.",
+  "You've made 'us' one of my favorite words.",
+  "No matter what today feels like, I'm glad it's you I get to come home to."
+];
+let factIndex = 0;
+const factBox = document.getElementById('factBox');
+const factCount = document.getElementById('factCount');
+const factNextBtn = document.getElementById('factNextBtn');
+
+function renderFact(){
+  factBox.style.opacity = 0;
+  setTimeout(()=>{
+    factBox.textContent = FACTS[factIndex];
+    factCount.textContent = `${factIndex+1} / ${FACTS.length}`;
+    factBox.style.opacity = 1;
+    factNextBtn.textContent = factIndex === FACTS.length-1 ? "start over ↺" : "Next fact →";
+  }, 150);
+}
+factBox.style.transition = "opacity .2s";
+factNextBtn.addEventListener('click', ()=>{
+  factIndex = (factIndex+1) % FACTS.length;
+  renderFact();
+});
+renderFact();
+
+/* ---------------- note jar ---------------- */
+const NOTES = [
+  "breathe. you're doing better than you think.",
+  "one thing at a time. that's all today needs from you.",
+  "you're allowed to rest without earning it.",
+  "i'm proud of you, even for the small stuff.",
+  "wherever you are right now, imagine me squeezing your hand.",
+  "you make my life warmer just by being in it.",
+  "it's okay to not be okay for a bit. i'm still here.",
+  "you are so loved, even on the loud, messy days."
+];
+document.getElementById('jarBtn').addEventListener('click', ()=>{
+  const note = NOTES[Math.floor(Math.random()*NOTES.length)];
+  document.getElementById('noteText').textContent = note;
+});
+
+/* ---------------- game tabs ---------------- */
+const wordGameWrap = document.getElementById('wordGameWrap');
+const memoryGameWrap = document.getElementById('memoryGameWrap');
+const catchGameWrap = document.getElementById('catchGameWrap');
+const newGameBtn = document.getElementById('newGameBtn');
+const newMemoryBtn = document.getElementById('newMemoryBtn');
+const gameTitle = document.getElementById('gameTitle');
+const gameSub = document.getElementById('gameSub');
+
+const TAB_CONFIG = {
+  word: {
+    wrap: wordGameWrap, extraBtn: newGameBtn,
+    title: 'guess the cozy word', sub: '5 letters, 6 tries, all warm & fuzzy words 💛'
+  },
+  memory: {
+    wrap: memoryGameWrap, extraBtn: newMemoryBtn,
+    title: 'memory match', sub: 'find every matching pair 🃏'
+  },
+  catch: {
+    wrap: catchGameWrap, extraBtn: null,
+    title: 'catch the hearts', sub: 'tap the heart before it hides — 30 seconds!'
+  }
+};
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.getAttribute('data-tab');
+    Object.entries(TAB_CONFIG).forEach(([key, cfg])=>{
+      cfg.wrap.style.display = key===tab ? '' : 'none';
+      if(cfg.extraBtn) cfg.extraBtn.style.display = key===tab ? '' : 'none';
+    });
+    gameTitle.textContent = TAB_CONFIG[tab].title;
+    gameSub.textContent = TAB_CONFIG[tab].sub;
+    if(tab==='memory' && !memoryStarted){ newMemoryGame(); }
+    if(tab==='catch' && !catchBuilt){ buildCatchBoard(); catchBuilt = true; }
+  });
+});
+
+/* ---------------- memory match game ---------------- */
+const MEMORY_EMOJIS = ['💕','🐻','🐰','🍯','✨','🌙','💌','🎀'];
+const memoryGrid = document.getElementById('memoryGrid');
+const memoryStats = document.getElementById('memoryStats');
+const memoryMsg = document.getElementById('memoryMsg');
+let memoryCards = [];
+let flipped = [];
+let matchedCount = 0;
+let moveCount = 0;
+let lockBoard = false;
+let memoryStarted = false;
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+  return arr;
+}
+
+function newMemoryGame(){
+  memoryStarted = true;
+  matchedCount = 0; moveCount = 0; flipped = []; lockBoard = false;
+  memoryMsg.textContent = "find all the matching pairs 💞";
+  const deck = shuffle([...MEMORY_EMOJIS, ...MEMORY_EMOJIS].map((e,i)=>({id:i, emoji:e, matched:false})));
+  memoryCards = deck;
+  renderMemoryGrid();
+  updateMemoryStats();
+}
+
+function renderMemoryGrid(){
+  memoryGrid.innerHTML = "";
+  memoryCards.forEach((card, idx)=>{
+    const btn = document.createElement('button');
+    btn.className = 'mcard';
+    btn.textContent = card.matched || flipped.includes(idx) ? card.emoji : '❔';
+    if(card.matched) btn.classList.add('matched');
+    else if(flipped.includes(idx)) btn.classList.add('flipped');
+    btn.addEventListener('click', ()=> flipCard(idx));
+    memoryGrid.appendChild(btn);
+  });
+}
+
+function updateMemoryStats(){
+  memoryStats.textContent = `moves: ${moveCount} · pairs found: ${matchedCount} / ${MEMORY_EMOJIS.length}`;
+}
+
+function flipCard(idx){
+  if(lockBoard) return;
+  if(flipped.includes(idx)) return;
+  if(memoryCards[idx].matched) return;
+  if(flipped.length===2) return;
+
+  flipped.push(idx);
+  renderMemoryGrid();
+
+  if(flipped.length===2){
+    moveCount++;
+    updateMemoryStats();
+    const [i1,i2] = flipped;
+    if(memoryCards[i1].emoji === memoryCards[i2].emoji){
+      memoryCards[i1].matched = true;
+      memoryCards[i2].matched = true;
+      matchedCount++;
+      flipped = [];
+      updateMemoryStats();
+      renderMemoryGrid();
+      if(matchedCount === MEMORY_EMOJIS.length){
+        memoryMsg.textContent = "you matched them all! you're a natural at this, cutie 🎉";
+      }
+    } else {
+      lockBoard = true;
+      setTimeout(()=>{
+        flipped = [];
+        lockBoard = false;
+        renderMemoryGrid();
+      }, 700);
+    }
+  }
+}
+newMemoryBtn.addEventListener('click', newMemoryGame);
+
+/* ---------------- catch the hearts ---------------- */
+const catchBoard = document.getElementById('catchBoard');
+const catchStats = document.getElementById('catchStats');
+const catchMsg = document.getElementById('catchMsg');
+const startCatchBtn = document.getElementById('startCatchBtn');
+let catchBuilt = false;
+let catchScore = 0;
+let catchTimeLeft = 30;
+let catchRunning = false;
+let catchActiveCell = null;
+let catchSpawnTimer = null;
+let catchCountdownTimer = null;
+
+function buildCatchBoard(){
+  catchBoard.innerHTML = "";
+  for(let i=0;i<12;i++){
+    const cell = document.createElement('button');
+    cell.className = 'ccell';
+    cell.type = 'button';
+    cell.addEventListener('click', ()=> hitCatchCell(i));
+    catchBoard.appendChild(cell);
+  }
+}
+
+function updateCatchStats(){
+  catchStats.textContent = `score: ${catchScore} · time left: ${catchTimeLeft}s`;
+}
+
+function spawnCatchHeart(){
+  Array.from(catchBoard.children).forEach(c=>{ c.classList.remove('active'); c.textContent=''; });
+  const idx = Math.floor(Math.random()*catchBoard.children.length);
+  const cell = catchBoard.children[idx];
+  cell.classList.add('active');
+  cell.textContent = '💗';
+  catchActiveCell = idx;
+}
+
+function hitCatchCell(i){
+  if(!catchRunning || i !== catchActiveCell) return;
+  catchScore++;
+  updateCatchStats();
+  const cell = catchBoard.children[i];
+  cell.classList.remove('active');
+  cell.textContent = '';
+  catchActiveCell = null;
+}
+
+function startCatchGame(){
+  catchScore = 0;
+  catchTimeLeft = 30;
+  catchRunning = true;
+  updateCatchStats();
+  catchMsg.textContent = "go go go! tap the hearts 💨";
+  startCatchBtn.disabled = true;
+  startCatchBtn.textContent = "playing...";
+  buildCatchBoard();
+  spawnCatchHeart();
+  catchSpawnTimer = setInterval(spawnCatchHeart, 800);
+  catchCountdownTimer = setInterval(()=>{
+    catchTimeLeft--;
+    updateCatchStats();
+    if(catchTimeLeft<=0) endCatchGame();
+  }, 1000);
+}
+
+function endCatchGame(){
+  catchRunning = false;
+  clearInterval(catchSpawnTimer);
+  clearInterval(catchCountdownTimer);
+  Array.from(catchBoard.children).forEach(c=>{ c.classList.remove('active'); c.textContent=''; });
+  const compliment = catchScore>=18 ? "you're basically a hug ninja 🥷💗" : catchScore>=10 ? "so quick, i love it 💫" : "not bad — want to try again?";
+  catchMsg.textContent = `time's up! final score: ${catchScore} · ${compliment}`;
+  startCatchBtn.disabled = false;
+  startCatchBtn.textContent = "Play again ▶️";
+}
+startCatchBtn.addEventListener('click', startCatchGame);
+
+/* ---------------- propose ---------------- */
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const proposeText = document.getElementById('proposeText');
+const proposeCard = document.getElementById('proposeCard');
+const proposeQuestion = document.getElementById('proposeQuestion');
+const proposeSuccess = document.getElementById('proposeSuccess');
+let noCount = 0;
+
+const noStageTexts = [
+  "hmm, are you sure about that? 🥺",
+  "pretty pretty please? 🥹💗",
+];
+
+noBtn.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  noCount++;
+  if(noCount === 1){
+    proposeText.textContent = noStageTexts[0];
+    yesBtn.classList.add('grow1');
+    noBtn.classList.add('shrink1');
+  } else if(noCount === 2){
+    proposeText.textContent = noStageTexts[1];
+    yesBtn.classList.remove('grow1');
+    yesBtn.classList.add('grow2');
+    noBtn.classList.remove('shrink1');
+    noBtn.classList.add('shrink2');
+  } else {
+    proposeText.textContent = "okay fine... just tap ANYWHERE 😌💍";
+    noBtn.style.display = 'none';
+    yesBtn.classList.remove('grow1','grow2');
+    proposeCard.classList.add('all-yes');
+    proposeCard.addEventListener('click', acceptProposal);
+  }
+});
+
+let proposalAccepted = false;
+function acceptProposal(e){
+  if(e) e.stopPropagation();
+  if(proposalAccepted) return;
+  proposalAccepted = true;
+  proposeQuestion.style.display = 'none';
+  proposeSuccess.style.display = 'block';
+  proposeCard.classList.remove('all-yes');
+  proposeCard.removeEventListener('click', acceptProposal);
+  const stage2 = document.getElementById('stage2');
+  setTimeout(()=>{
+    stage2.classList.add('hugging');
+    setTimeout(()=> stage2.classList.add('kissing'), 500);
+  }, 250);
+}
+yesBtn.addEventListener('click', acceptProposal);
+</script>
+</body>
+</html>
