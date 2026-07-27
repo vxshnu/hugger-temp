@@ -427,6 +427,25 @@
     border: 2px solid #f0c9db; min-height:70px; display:flex; align-items:center; justify-content:center;
     margin-top:6px;
   }
+
+  /* ---------- kiss counter ---------- */
+  .kiss-count-big{
+    font-family:'Fredoka', sans-serif; font-size:44px; font-weight:700;
+    color: var(--rose); margin: 2px 0 0;
+  }
+  .kiss-gif-wrap{
+    width:100%; max-width:280px; aspect-ratio:1/1;
+    margin: 16px auto 6px; border-radius:20px; overflow:hidden;
+    box-shadow: 0 12px 26px rgba(0,0,0,0.18);
+    background:#fdf2f7;
+  }
+  .kiss-gif-wrap img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .kiss-gif-fallback{
+    display:none; height:100%; width:100%;
+    align-items:center; justify-content:center; flex-direction:column;
+    text-align:center; gap:8px; font-size:34px; color:#c98fae;
+  }
+  .kiss-gif-fallback span{ font-size:12px; color:#a08bb5; max-width:180px; }
 </style>
 </head>
 <body>
@@ -475,6 +494,16 @@
         <span class="emoji">🍯</span>
         <span class="name">Note Jar</span>
         <span class="desc">pick a little note</span>
+      </button>
+      <button class="tile" data-go="kiss">
+        <span class="emoji">💋</span>
+        <span class="name">Kiss Counter</span>
+        <span class="desc">dudu just won't stop</span>
+      </button>
+      <button class="tile" data-go="spinhug">
+        <span class="emoji">🤗🔄</span>
+        <span class="name">Spin Hug Counter</span>
+        <span class="desc">an endless spinning hug</span>
       </button>
       <button class="tile" data-go="propose" style="grid-column: 1 / -1;">
         <span class="emoji">💍</span>
@@ -583,6 +612,46 @@
     </div>
   </section>
 
+  <!-- KISS COUNTER SCREEN -->
+  <section class="screen" id="screen-kiss">
+    <div class="card">
+      <span class="eyebrow">non-stop affection</span>
+      <h1 class="display">umma 💋</h1>
+      <p class="kiss-count-big" id="kissCounterText">0</p>
+      <p class="sub" style="margin-top:-4px;">kisses and counting... dudu really can't stop</p>
+
+      <div class="kiss-gif-wrap" id="kissGifWrap">
+        <img src="dudu-kiss.gif" alt="dudu and bubu kissing" id="kissGifImg"
+             onerror="this.style.display='none'; document.getElementById('kissGifFallback').style.display='flex';" />
+        <div class="kiss-gif-fallback" id="kissGifFallback">
+          💋<br><span>put "dudu-kiss.gif" next to this file</span>
+        </div>
+      </div>
+
+      <div class="back-row"><button class="btn secondary" data-go="home">← back home</button></div>
+    </div>
+  </section>
+
+  <!-- SPIN HUG COUNTER SCREEN -->
+  <section class="screen" id="screen-spinhug">
+    <div class="card">
+      <span class="eyebrow">spin hug counter</span>
+      <h1 class="display">spin hug 🤗🔄</h1>
+      <p class="kiss-count-big" id="spinHugCounterText">0</p>
+      <p class="sub" style="margin-top:-4px;">round and round, one hug at a time</p>
+
+      <div class="kiss-gif-wrap" id="spinHugGifWrap">
+        <img src="spin-hug.gif" alt="bubu and dudu spinning while hugging" id="spinHugGifImg"
+             onerror="this.style.display='none'; document.getElementById('spinHugGifFallback').style.display='flex';" />
+        <div class="kiss-gif-fallback" id="spinHugGifFallback">
+          🤗<br><span>put "spin-hug.gif" next to this file</span>
+        </div>
+      </div>
+
+      <div class="back-row"><button class="btn secondary" data-go="home">← back home</button></div>
+    </div>
+  </section>
+
   <!-- PROPOSE SCREEN -->
   <section class="screen" id="screen-propose">
     <div class="card" id="proposeCard">
@@ -672,10 +741,46 @@ for(let i=0;i<16;i++){
 function showScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+name).classList.add('active');
+  if(name === 'kiss') startKissTimer(); else stopKissTimer();
+  if(name === 'spinhug') startSpinHugTimer(); else stopSpinHugTimer();
 }
 document.querySelectorAll('[data-go]').forEach(el=>{
   el.addEventListener('click', ()=> showScreen(el.getAttribute('data-go')));
 });
+
+/* ---------------- kiss counter ---------------- */
+let kissCount = 0;
+let kissTimer = null;
+const kissCounterText = document.getElementById('kissCounterText');
+
+function startKissTimer(){
+  if(kissTimer) return;
+  kissTimer = setInterval(()=>{
+    kissCount++;
+    kissCounterText.textContent = kissCount;
+  }, 500);
+}
+function stopKissTimer(){
+  clearInterval(kissTimer);
+  kissTimer = null;
+}
+
+/* ---------------- spin hug counter ---------------- */
+let spinHugCount = 0;
+let spinHugTimer = null;
+const spinHugCounterText = document.getElementById('spinHugCounterText');
+
+function startSpinHugTimer(){
+  if(spinHugTimer) return;
+  spinHugTimer = setInterval(()=>{
+    spinHugCount++;
+    spinHugCounterText.textContent = spinHugCount;
+  }, 800);
+}
+function stopSpinHugTimer(){
+  clearInterval(spinHugTimer);
+  spinHugTimer = null;
+}
 
 /* ---------------- lock screen ---------------- */
 const PASSWORD = "2025-03-31";
